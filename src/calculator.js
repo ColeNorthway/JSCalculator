@@ -1,8 +1,9 @@
 let state = []
 const digits = ['0','1','2','3','4','5','6','7','8','9']
-const operators = ['+', '-', '/', '*']
+const operators = ['*', '/', '+', '-']  // Note in PEMDAS order
 
 function divide(num1, num2) {
+  if(num2===0) return "Err Div by 0";
   return Math.floor(num1 / num2);
 }
 
@@ -44,8 +45,39 @@ function operate(num1, num2, op) {
   }
 }
 
+function getNextOperatorPos() {
+  for(const op of operators) {
+    for(let i=0; i<state.length; i++) {
+      if(state[i]===op) return i;
+    }
+  }
+}
+
+function checkErr(res) {
+  return typeof res !== 'number';
+}
+
+function updateState(indx, res){
+  state.splice(indx-1, 3);
+  state.splice(indx-1, 0, res);
+}
+
 function handleEquation() {
+  if(state.length===0)   return;
+  if(state.length===1)   return;
+  if(state.length%2===0) return;  // Impossible bc operators
+
   // PEMDAS
+  while(state.length!==1) {
+    let indx = getNextOperatorPos();
+    let res = operate(state[indx-1], state[indx], state[indx+1]);
+    if(checkErr(res)) {
+      handleClear();
+      state.push(res);
+    }
+    updateState(indx, res);
+    console.log(res);
+  }
   console.log(state);
 }
 
@@ -72,6 +104,8 @@ function onClick(e) {
   } else {
     handleOperator(val);
   }
+
+  updateUI();
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
