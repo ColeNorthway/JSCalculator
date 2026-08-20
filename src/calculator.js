@@ -3,7 +3,7 @@ const digits = ['0','1','2','3','4','5','6','7','8','9']
 const operators = ['*', '/', '+', '-']  // Note in PEMDAS order
 
 function divide(num1, num2) {
-  if(num2===0) return "Err Div by 0";
+  if(num2==='0') return "Err Div by 0";
   return String(Math.floor(parseInt(num1) / parseInt(num2)));
 }
 
@@ -84,7 +84,7 @@ function handleEquation() {
     let res = operate(state[indx-1], state[indx+1], state[indx]);
     if(checkErr(res)) {
       handleClear();
-      state.push(res);
+      alert(res);
     }
     updateState(indx, res);
   }
