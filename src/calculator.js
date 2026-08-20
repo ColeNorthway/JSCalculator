@@ -4,22 +4,35 @@ const operators = ['*', '/', '+', '-']  // Note in PEMDAS order
 
 function divide(num1, num2) {
   if(num2===0) return "Err Div by 0";
-  return Math.floor(num1 / num2);
+  return String(Math.floor(parseInt(num1) / parseInt(num2)));
 }
 
 function add(num1, num2) {
-  return num1 + num2;
+  return String(parseInt(num1) + parseInt(num2));
 }
 
 function multiply(num1, num2) {
-  return num1 * num2;
+  return String(parseInt(num1) * parseInt(num2));
 }
 
 function subtract(num1, num2) {
-  return num1 - num2;
+  return String(parseInt(num1) - parseInt(num2));
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+function formatState() {
+  let res = "";
+  for(const s of state) {
+    res += s + " ";
+  }
+  return res.trim();
+}
+
+function updateUI() {
+  let ui = document.querySelector("input");
+  ui.value = formatState();
+}
 
 function handleOperator(operator) {
   if(!state.length) {
@@ -28,12 +41,10 @@ function handleOperator(operator) {
   if(!( operators.includes(state[state.length-1]) )) {
     state.push(operator);
   }
-  console.log(state);
 }
 
 function handleClear() {
   state = [];
-  console.log(state);
 }
 
 function operate(num1, num2, op) {
@@ -54,7 +65,7 @@ function getNextOperatorPos() {
 }
 
 function checkErr(res) {
-  return typeof res !== 'number';
+  return res === "Err Div by 0";
 }
 
 function updateState(indx, res){
@@ -70,15 +81,13 @@ function handleEquation() {
   // PEMDAS
   while(state.length!==1) {
     let indx = getNextOperatorPos();
-    let res = operate(state[indx-1], state[indx], state[indx+1]);
+    let res = operate(state[indx-1], state[indx+1], state[indx]);
     if(checkErr(res)) {
       handleClear();
       state.push(res);
     }
     updateState(indx, res);
-    console.log(res);
   }
-  console.log(state);
 }
 
 function handleDigit(digit) {
@@ -89,7 +98,6 @@ function handleDigit(digit) {
   } else {
     state.push(digit);
   }
-  console.log(state);
 }
 
 function onClick(e) {
